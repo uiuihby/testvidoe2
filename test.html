@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">
+  <title>直播详情</title>
+  <script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-9u9lzb/hr8e14GLHe5TEOrTiH3Qtw5DX2Zw9X/g7cqj81W2McEMx5CKOszxdb8jg"
+    src="https://lib.baomitu.com/vue/2.6.10/vue.js"></script>
+  <link rel="stylesheet" href="./css/xgplayer.css" />
+  <script src="./js/xgplayer.js" charset="utf-8"></script>
+  <script src="./js/index.js" charset="utf-8"></script>
+  <script src="./js/xgplayerHls2.js?v=1.0012" charset="utf-8"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.9.0/vconsole.min.js"></script>
+    <script>
+        // init vConsole
+        var vConsole = new VConsole();
+        console.log(2)
+       
+    console.log(HlsJsPlayer)
+    console.log(2)
+    </script>
+  <script type="text/javascript">
+    var detail2 = {};
+    (function () {
+      var phoneWidth = parseInt(window.screen.width);
+      var phoneScale = phoneWidth / 750;
+      var ua = navigator.userAgent; //浏览器类型
+      if (/Android (\d+\.\d+)/.test(ua)) { //判断是否是安卓系统
+        var version = parseFloat(RegExp.$1); //安卓系统的版本号
+        if (version > 2.3) {
+          document.write('<meta name="viewport" content="width=750, minimum-scale = ' + phoneScale +
+            ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+        } else {
+          document.write('<meta name="viewport" content="width=750, target-densitydpi=device-dpi">');
+        }
+      } else {
+        document.write('<meta name="apple-mobile-web-app-capable" content="width=750, user-scalable=no">');
+      }
+    }());
+  </script>
+</head>
+
+
+
+
+
+<body>
+
+  <div id="app">
+    <video id="hlsVideo" v-show="false" v-if="hlsVideolive"></video>
+    <div id="mse">
+      <template v-if="videoComplete">
+
+        <img src="/image/video/zhuanxiang.png" id="zhuanId" @click="Fullscreen" alt="">
+        <img class="lookBack" src="/image/video/lookback.png" alt="">
+
+        <span v-show="controlShow && isPlaying">
+          <img src="/image/video/play.png" class="ispaseImg" alt="" v-if="ispase" @click="paseClick(true)">
+          <img src="/image/video/pause.png" class="ispaseImg" alt="" v-else @click="paseClick(false)">
+
+          <img src="/image/video/add15s.png" style="left:360px;" class="addTime" alt="" @click="fast(true)">
+          <img src="/image/video/back15s.png" class="addTime" alt="" @click="fast(false)">
+
+          <div class="qinxidu" @click="changeDivShowClick ">
+            {{qingxiLisg[qingxiduIndex]}}
+          </div>
+
+        </span>
+
+        <template v-if="changeDivShow">
+          <div class="qingxidulist">
+            <li v-for="(site,index) in qingxiLisg" :key='index' :class="qingxiduIndex==index?'qingxiActive':''"
+              @click="changeqingxidu(index)">{{site}}
+              <img src="/image/video/4k.png" alt="" v-if="index==2">
+            </li>
+          </div>
+        </template>
+
+      </template>
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          videoComplete: false, // 视频就绪
+          isqiehuanqignxidu:false, // 是否切换了清晰度 用于切换后跳转到原先秒数
+          player: null, // 视频原型
+          isFullscreen: false, // 是否全屏
+          ispase: false, // 是否暂停
+          controlShow: true, // 进度条是否显示
+          isPlaying: false,
+          qingxiduIndex: 1,
+          qingxiLisg: ['流畅', '1080p', '4k'],
+          changeDivShow: false,
+          vidoeUrl: [], // 视频源
+          currentTime:0, // 当前秒数
+          hlsVideolive:true,
+        }
+      },
+      mounted() {
+
+        this.getxgPlayer('https://1500002341.vod2.myqcloud.com/4382847avodtranscq1500002341/cf6598755285890809935523834/adp.219627.m3u8');
+      },
+      methods: {
+        changeqingxidu(index) {    // 切换清晰度
+          this.qingxiduIndex = index
+          this.changeDivShow = false
+          this.player.src = this.vidoeUrl[index]
+          this.isqiehuanqignxidu=true      
+        },
+        changeDivShowClick(){             // 切换清晰度
+          this.currentTime=$("#mse").find("video")[0].currentTime
+          this.changeDivShow=!this.changeDivShow
+          this.paseClick(false)           // 必须暂停，不然会出问题
+        },
+        getxgPlayer(url) {
+          this.hlsVideolive=false
+          let videoUrlList=this.vidoeUrl
+          console.log(3)
+          this.player = new HlsJsPlayer({
+            "id": "mse",
+            "url":url,
+            "playsinline": true,
+            'x5-video-player-type': 'h5', // 微信同层播放 可以显示html元素
+            fluid: true,
+            autoplay: true,
+            // useHls: true,
+            ignores: ['volume', 'fullscreen', 'play'],
+            poster: "https://culturecloud.oss-cn-hangzhou.aliyuncs.com/test/202106181152576bbe9b4a055a45d3aa0d3d7bd44195bf_i.jpg",
+            "whitelist": [""],
+            "playbackRate": [2, 1.5, 1],
+            "thumbnail": {
+              "pic_num": 44,
+              "width": 160,
+              "height": 90,
+              "col": 10,
+              "row": 10,
+              "urls": [""]
+            },
+            "x5-video-player-type": "h5",
+            "x5-video-player-fullscreen": "true",
+            "x5-video-orientation": "landscape",
+          });
+       
+          this.player.on("controlHide", () => {   // 进度条显示与隐藏
+            this.controlShow = false;
+          })
+          this.player.on("controlShow", () => {
+            this.controlShow = true;
+          })
+          this.player.once('complete', () => { // 准备就绪
+            this.videoComplete = true
+            $(".xgplayer-start").show();
+            console.log(this.player)
+            console.log(5)
+          })
+          this.player.on('pause', () => {      // 播放器暂停与播放
+            this.ispase = true
+          })
+          this.player.on('play', () => {
+            if(this.isqiehuanqignxidu){
+              this.player.currentTime+=this.currentTime
+              this.isqiehuanqignxidu=false
+            }
+            this.ispase = false
+            this.changeDivShow=false
+            this.isPlaying = true
+            $(".xgplayer-start").hide();
+          })
+
+          this.player.on("ended", () => {
+            this.isPlaying = false
+            this.changeDivShow = false
+          })
+        },
+
+        Fullscreen() { // 全屏
+          if (!this.isFullscreen) {
+            this.player.getCssFullscreen()
+          } else {
+            this.player.exitCssFullscreen()
+          }
+          this.isFullscreen = !this.isFullscreen
+        },
+
+        paseClick(isplay) {       // 播放暂停点击
+          if (isplay) {
+            this.player.play()
+          } else {
+            this.player.pause()
+          }
+        },
+
+        fast(isFast) {        // 进度
+          if (isFast) {
+            this.player.currentTime += 15
+          } else {
+            this.player.currentTime -= 15
+          }
+        },
+
+
+
+      }
+    })
+  </script>
+
+
+</body>
+
+</html>

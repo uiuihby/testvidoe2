@@ -1,0 +1,139 @@
+#zhuanId {
+  display: block;
+  position: absolute;
+  outline: none;
+  z-index: 35;
+  width: 64px;
+  height: 64px;
+  left: 40px;
+  top: calc(50% - 32px);
+}
+.lookBack {
+  top: 23px;
+  z-index: 35;
+  right: 21px;
+  position: absolute;
+}
+.ispaseImg {
+  display: block;
+  position: absolute;
+  outline: none;
+  z-index: 35;
+  width: 45px;
+  height: 45px;
+  left: 40px;
+  bottom: 87px;
+}
+.addTime {
+  display: block;
+  position: absolute;
+  outline: none;
+  z-index: 35;
+  width: 56px;
+  height: 56px;
+  left: 272px;
+  bottom: 23px;
+}
+.qinxidu {
+  background: #647EFF;
+  display: block;
+  position: absolute;
+  border-radius: 22px;
+  outline: none;
+  z-index: 35;
+  right: 42px;
+  bottom: 23px;
+  color: #FFFFFF;
+  font-weight: 500 !important;
+  line-height: 56px !important;
+  width: 112px;
+  height: 56px;
+  text-align: center;
+  font-size: 26px !important;
+}
+.qingxidulist {
+  display: block;
+  position: absolute;
+  outline: none;
+  z-index: 35;
+  left: 14%;
+  top: calc(50% - 32px);
+}
+.qingxidulist li {
+  width: 180px;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  margin-right: 30px;
+  display: inline-block;
+  border-radius: 28px;
+  color: #fff;
+  font-size: 36px;
+}
+.qingxidulist img {
+  width: 53px;
+  height: 44px;
+  vertical-align: middle;
+  margin-bottom: 3px;
+  margin-left: 5px;
+}
+.qingxidulist .qingxiActive {
+  height: 86px;
+  background: #647EFF;
+  border: 2px solid #FFFFFF;
+}
+.xgplayer-skin-default .xgplayer-progress {
+  width: calc(100% - 150px) !important;
+  left: 110px !important ;
+  z-index: 8px;
+  top: -34px !important;
+}
+.xgplayer-skin-default .xgplayer-progress-outer {
+  height: 8px !important;
+  margin-top: 8.5px !important;
+}
+.xgplayer-skin-default .xgplayer-progress-btn {
+  z-index: 9999 !important;
+  height: 32px !important;
+  width: 32px !important;
+  top: -12px !important;
+  background-color: hsl(0, 0%, 100%) !important;
+}
+.xgplayer-skin-default .xgplayer-controls {
+  height: 88px !important;
+}
+.xgplayer-skin-default .xgplayer-time {
+  font-size: 24px  !important;
+  margin-left: 40px !important;
+}
+.xgplayer-skin-default .xgplayer-playbackrate {
+  z-index: 48 !important;
+  margin-top: -94px !important;
+  margin-right: 220px;
+}
+.xgplayer-skin-default .xgplayer-playbackrate .name {
+  width: 88px !important;
+  bottom: -9px !important;
+  height: 56px !important;
+  font-size: 26px !important;
+  line-height: 56px !important;
+  border-radius: 22px !important;
+}
+.xgplayer-skin-default .xgplayer-playbackrate ul {
+  left: 71% !important;
+  width: 87px !important;
+  bottom: 47px !important;
+  font-size: 26px !important;
+  border-radius: 17px !important;
+  line-height: 1.5 !important;
+}
+.xgplayer-skin-default .xgplayer-playbackrate ul li {
+  font-size: 100% !important;
+}
+.xgplayer-start {
+  display: none;
+}
+#app .xgplayer-skin-default video {
+  height: 100% !important;
+}

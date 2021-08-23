@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">
+    <title>直播详情</title>
+    <link rel="stylesheet" href="./ali/aliicon.css">
+    <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css" />
+    <link rel="stylesheet" type="text/css" href="./ali/detail.css?v=1.26">
+
+    <!-- 引入组件库 -->
+
+    <script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+
+    <script crossorigin="anonymous" integrity="sha384-9u9lzb/hr8e14GLHe5TEOrTiH3Qtw5DX2Zw9X/g7cqj81W2McEMx5CKOszxdb8jg" src="https://lib.baomitu.com/vue/2.6.10/vue.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-iY48mspuUJ7KyIglN9JjM9stxRtuoz9/UMA9Ffe2uluL8ej5FjNsCxj4XNYv866H" src="https://lib.baomitu.com/vue-resource/1.5.1/vue-resource.js"></script>
+
+    <script charset="utf-8" type="text/javascript" src="./ali/aliplayer-min.js?v-1.26"></script>
+    <script charset="utf-8" type="text/javascript" src="./ali/aliplayercomponents-1.0.5.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.9.0/vconsole.min.js"></script>
+    <script>
+        // init vConsole
+        var vConsole = new VConsole();
+        console.log('Hello world');
+    </script>
+    <!--移动端版本兼容 -->
+    <script type="text/javascript">
+        var detail2 = {};
+        (function() {
+            var phoneWidth = parseInt(window.screen.width);
+            var phoneScale = phoneWidth / 750;
+            var ua = navigator.userAgent; //浏览器类型
+            if (/Android (\d+\.\d+)/.test(ua)) { //判断是否是安卓系统
+                var version = parseFloat(RegExp.$1); //安卓系统的版本号
+                if (version > 2.3) {
+                    document.write('<meta name="viewport" content="width=750, minimum-scale = ' + phoneScale + ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+                } else {
+                    document.write('<meta name="viewport" content="width=750, target-densitydpi=device-dpi">');
+                }
+            } else {
+                document.write('<meta name="apple-mobile-web-app-capable" content="width=750, user-scalable=no">');
+            }
+        }());
+    </script>
+</head>
+
+<body>
+
+    <div id="app" v-cloak class="xgPlayer">
+      <div id="prismPlayer" ref="header"  class="prismPlayer">
+
+
+        <!-- <img src="./ali/image/zhuanxiang.png" class="zhuanId" alt=""> -->
+        <img src="./ali/image/lookback.png" alt="" class="lookBack">
+
+    </div>
+  </div>
+    <script>
+
+        const u = navigator.userAgent
+        const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        $(document).ready(function() {
+            $(".comment-container input").blur(function() {
+                if (isIOS) {
+                    blurAdjust()
+                }
+            });
+        });
+        // 解决苹果不回弹页面
+        function blurAdjust(e) {
+            setTimeout(() => {
+                if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                    return
+                }
+                let result = 'pc';
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //判断iPhone|iPad|iPod|iOS
+                    result = 'ios'
+                } else if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+                    result = 'android'
+                }
+                if (result = 'ios') {
+                    document.activeElement.scrollIntoViewIfNeeded(true);
+                }
+            }, 100)
+        }
+        let app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                  player:null,
+                }
+            },
+
+            mounted() {
+
+              this.getPlayer('https://1500002341.vod2.myqcloud.com/4382847avodtranscq1500002341/cf6598755285890809935523834/adp.219627.m3u8')
+            },
+
+            methods: {
+                getPlayer(url) {
+                                let that=this
+                               let bool = true
+                               var videoElement
+                               let isplay=false
+                               this.player = new Aliplayer({
+                                id: 'prismPlayer',
+                                autoplay: false,
+                                playsinline: true,
+                                useH5Prism: true,
+                                width: '100%',
+                                height: "420px",
+                                mediaType: 'video',
+                                qualitySort: 'asc',
+                                keyFastForwardStep:15,
+                                defaultDefinition: "SD",
+                                controlBarVisibility: "click",
+                                cover: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg95.699pic.com%2Fphoto%2F40133%2F5351.gif_wh300.gif%21%2Fgifto%2Ftrue&refer=http%3A%2F%2Fimg95.699pic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1632144332&t=bb691dff59daaeca8bb545a788199dff',
+                                x5_type: "h5",
+                                x5_video_position: "top",
+                                isLive: false,
+                                x5LandscapeAsFullScreen: true,
+                                source: url,
+                                preload: true,
+                                components: [{
+      name: 'RateComponent',
+      type: AliPlayerComponent.RateComponent
+    }],
+                                skinLayout: [
+                                {
+                                    name: "bigPlayButton",
+                                    align: "cc"
+                                }, {
+                                    name: "H5Loading",
+                                    align: "cc"
+                                }, {
+                                    name: "errorDisplay",
+                                    align: "tlabs",
+                                    x: 0,
+                                    y: 0
+                                }, {
+                                    name: "infoDisplay"
+                                }, {
+                                    name: "tooltip",
+                                    align: "blabs",
+                                    x: 0,
+                                    y: 56
+                                }, {
+                                    name: "thumbnail"
+                                }, {
+                                    name: "controlBar",
+                                    align: "blabs",
+                                    x: 0,
+                                    y: 0,
+                                    children: [{
+                                        name: "progress",
+                                        align: "blabs",
+                                        x: 0,
+                                        y: 44
+                                    }, {
+                                        name: "playButton",
+                                        align: "tl",
+                                        x: 15,
+                                        y: 12
+                                    }, {
+                                        name: "timeDisplay",
+                                        align: "tl",
+                                        x: 10,
+                                        y: 7
+                                    }, {
+                                        name: "fullScreenButton",
+                                        align: "tr",
+                                        x: 10,
+                                        y: 12
+                                    }, {
+                                        name:'setting',
+                                        align: "tr",
+                                        x: 15,
+                                        y: 12
+                                    }]
+                                }]
+                            }, function(player) {
+                                console.log('creat')
+                                // that.player.play();
+                                
+                               console.log($("#prismPlayer").find("video")) 
+                               $("#prismPlayer").find("video").attr('id',"videoPlay")
+                                player.on("play", () => {
+                                    console.log("开始播放")    
+                                    // $(".prism-fullscreen-btn").hide()
+                                    $(".prism-setting-btn").hide()
+                                   
+                                    $(".btnClick").addClass("isPlayImg")
+                                    $(".prism-setting-btn").click()
+                                    $(".prism-setting-item").click()
+                                    
+                                    console.log($(".prism-quality-selector").find(".selector-list").find("li"))
+                                    console.log($(".prism-quality-selector").find(".selector-list").find("li").eq(0).text())   // 获取视频源
+       
+                                    isplay=true
+                                    
+                                })
+                                player.on("pause", () => {
+                                    console.log("暂停播放")    
+               
+                                    $(".btnClick").removeClass("isPlayImg")
+                                    isplay=false
+                                })
+                                player.on("timeupdate", (val) => {
+                             
+                                })
+                                player.on("ended", (val) => {
+                                    $(".prism-big-play-btn").hide();
+                            })
+                                
+                             
+  
+                                
+                     
+
+                            });
+                            var u = navigator.userAgent;
+                            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                            this.player.on("requestFullScreen", () => {
+                                console.log("进入全屏----")
+                          
+                                    $("#prismPlayer").removeClass('prismPlayer')
+                                
+                            })
+                            this.player.on("cancelFullScreen", () => {
+                                    console.log("退出全屏----")
+                                        $("#prismPlayer").addClass('prismPlayer')
+                                })
+                                let beishushow=false
+                                $(".beishu").click(()=>{
+                                    beishushow=!beishushow
+                                    if(beishushow){
+                                        $('.xgplayer-playbackrate').show()
+                                    }else {
+                                        $('.xgplayer-playbackrate').hide()
+                                    }
+                       
+                                })
+                                $(".1x").click(()=>{                    // 1倍数 清晰度切换
+                                    console.log(1)
+                                    console.log($(".rate-list").find("li"))
+                                   $(".rate-list").find("li").eq(3).click()
+                                    $(".beishu").text('1x')
+                                    $('.xgplayer-playbackrate').hide()
+                                    $(".1x").addClass("beishuactive")
+                                    $(".15x").removeClass("beishuactive")
+                                    $(".2x").removeClass("beishuactive")
+                                    beishushow=false
+
+                                })
+                                $(".15x").click(()=>{                   // 1.5倍数 清晰度切换
+                                    console.log(1.5)
+                                    $(".rate-list").find("li").eq(2).click()
+                                    $(".beishu").text('1.5x')
+                                    $('.xgplayer-playbackrate').hide()
+
+                                    $(".15x").addClass("beishuactive")
+                                    $(".1x").removeClass("beishuactive")
+                                    $(".2x").removeClass("beishuactive")
+                                    beishushow=false
+                                })
+                                $(".2x").click(()=>{                    // 2倍数 清晰度切换
+                                    console.log(2)
+                                    $(".rate-list").find("li").eq(0).click()
+                                    $(".beishu").text('2x')
+                                    $('.xgplayer-playbackrate').hide()
+                                    $(".2x").addClass("beishuactive")
+                                    $(".15x").removeClass("beishuactive")
+                                    $(".1x").removeClass("beishuactive")
+                                    beishushow=false
+                                })
+                                $(".ispaseImg").click(()=>{
+                                    if(isplay){
+                                        this.player.pause();
+                                    }else {
+                                        this.player.play();
+                                    }
+                                 
+                                })
+                                $(".qinxidu").click(()=>{
+                                    alert("清晰度样式重新做了 先自动切换至流畅")
+                                    $(".prism-quality-selector").find(".selector-list").find("li").eq(2).click()
+                                })
+                                $(".zhuanId").click(()=>{
+                                    console.log(1111111)
+                                    setTimeout(()=>{
+                                        $(".prism-fullscreen-btn").click();
+                                    },200)
+                               
+                                })
+                                $(".add15s").click(()=>{
+                                    var videoElement = document.getElementById("videoPlay");
+                                    videoElement.currentTime += 15
+                                })
+                                $(".back15s").click(()=>{
+                                    var videoElement = document.getElementById("videoPlay");
+                                    videoElement.currentTime -= 15
+                                })
+
+
+                    }
+
+
+                },
+                
+      
+
+
+        })
+    </script>
+</body>
+
+</html>
